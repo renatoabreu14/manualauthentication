@@ -14,3 +14,26 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+Route::prefix('auth')
+    ->middleware('web')
+    ->group(function(){
+        Route::get('login', 'AuthController@login');
+        Route::post('login', 'AuthController@attempt');
+
+        Route::get('register', 'AuthController@register');
+        Route::post('register', 'AuthController@create');
+
+        Route::get('logout', 'AuthController@logout');
+    });
+
+Route::prefix('dashboard')
+    ->middleware('auth')
+    ->group(function(){
+        Route::get('/', 'DashboardController@index');
+    });
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
